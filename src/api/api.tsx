@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-axios.defaults.baseURL = 'http://localhost:3001'; 
+axios.defaults.baseURL = process.env.REACT_SERVICE_URL || 'http://localhost:3001'; 
 
 const userService: AxiosInstance = axios.create({
   baseURL: process.env.REACT_SERVICE_URL,
@@ -8,7 +8,7 @@ const userService: AxiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
+// set access token from sign service response
 const setAuthToken = (token: string | null) => {
   if (token) {
     localStorage.setItem('accessToken', token);
@@ -46,15 +46,25 @@ const sign = async function(data: any) {
     const response = await userService.post('/sign', data);
     if ('accessToken' in response.data) {
       const { accessToken } = response.data;
+      // put access token
       setAuthToken(accessToken);
       return accessToken;
     }
-    return
   } catch (error) {
     console.error('Signing error:', error);
     throw error; 
   }
-
 }
+
+const get = async function () {
+  try {
+    const response = await userService.post('/user');
+    return response.data;
+  } catch (error) {
+    console.error('Signing error:', error);
+    throw error; 
+  }
+}
+
 export default userService;
-export {login, update, sign, getAuthToken} ;
+export {login, update, sign, getAuthToken, get} ;
