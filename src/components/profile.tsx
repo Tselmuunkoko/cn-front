@@ -5,6 +5,7 @@ import { RootState } from '../store/reducers';
 import { useDispatch } from 'react-redux';
 import { setEmail, setPhone } from '../store/userSlice';
 
+// Profile component which handles user profile update function
 function ProfileComponent() {
     const email = useSelector((state: RootState) => state.user.email);
     const phone = useSelector((state: RootState) => state.user.phone);
